@@ -1,28 +1,28 @@
-#FCN,RCNN
-    import torch
-    import torchvision
-    from torchvision import transforms
-    from PIL import Image
-    import matplotlib.pyplot as plt
+import numpy as np
 
-    fcc = torchvision.models.segmentation.fcn_resnet50(pretrained=True).eval()
-    rcnn = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True).eval()
+# a) Create a 1D NumPy array using array()
+arr_1d = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+print("1D Array:", arr_1d)
 
-    def process_img(image,fcn,rcnn):
-        tensor = transforms.ToTensor()(image).unsqueeze(0)
-        with torch.no_grad():
-            seg = fcn(tensor)['out'].argmax(1).squeeze().cpu().numpy()
-        
-        det = rcnn([tensor.squeeze(0)])[0]
+# b) Create 3x3 arrays
+ones_arr = np.ones((3, 3))
+zeros_arr = np.zeros((3, 3))
+eye_arr = np.eye(3)
 
-        fig,ax = plt.subplots(1,3,figsize=(15,5))
-        ax[0].imshow(image)
-        ax[1].imshow(seg)
-        ax[2].imshow(image)
-        for x_min,y_min,x_max,y_max in det['boxes'].detach().cpu().numpy():
-            ax[2].add_patch(plt.Rectangle((x_min,y_min),x_max-x_min,y_max-y_min,fill=False,color='red'))
-        plt.tight_layout()
-        plt.show()
+print("\n3x3 Ones Array:\n", ones_arr)
+print("\n3x3 Zeros Array:\n", zeros_arr)
+print("\n3x3 Identity (eye) Array:\n", eye_arr)
 
-    test_image1 = Image.open(r'filelink').convert('RGB')
-    process_img(test_image1, fcc,rcnn)
+# c) Create a 4x4 random array
+rand_arr = np.random.rand(4, 4)
+print("\n4x4 Random Array:\n", rand_arr)
+
+# d) Reshape the 1D array into 3×3 (only if possible)
+if arr_1d.size == 9:
+    reshaped = arr_1d.reshape(3, 3)
+    print("\nReshaped 3x3 Array:\n", reshaped)
+
+    # Slicing rows 1 to 2 (index 1:3)
+    print("\nSlicing rows 1 to 2:\n", reshaped[1:3])
+else:
+    print("\nCannot reshape into 3x3 array")
